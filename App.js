@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, Button, FlatList, Linking } from 'react-native'
 import * as Permissions from 'expo-permissions';
 import * as Contacts from 'expo-contacts';
 
+import createStore from './store';
+const store = createStore();
+
 export default function App() {
   const [contacts, setContacts] = useState([]);
   const [permissions, setPermissions] = useState(false);
@@ -30,19 +33,21 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Button
-        title="Get Contacts"
-        onPress={showContacts}
-      />
-      <FlatList
-        // data={[{ id: 1, title: 'one' }, { id: 2, title: 'two' }]}
-        data={contacts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Button title={item.name} onPress={() => call(item)} />}
-      />
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <Text>Open up App.js to start working on your app!</Text>
+        <Button
+          title="Get Contacts"
+          onPress={showContacts}
+        />
+        <FlatList
+          // data={[{ id: 1, title: 'one' }, { id: 2, title: 'two' }]}
+          data={contacts}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Button title={item.name} onPress={() => call(item)} />}
+        />
+      </View>
+    </Provider>
   );
 }
 
